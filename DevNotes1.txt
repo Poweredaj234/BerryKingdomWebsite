@@ -12,3 +12,5 @@ Here are the User Variables:
         7, Citizen 
         )
     House (String)
+
+BlackJack missing logic.. \games\logic.py && views.py
