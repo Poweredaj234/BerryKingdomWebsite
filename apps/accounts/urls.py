@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, RegisterView, LoginView, LogoutView, leaderboard, TransferBalanceView, UpdateHouseView
+from .views import UserViewSet, RegisterView, LoginView, LogoutView, leaderboard, TransferBalanceView, UpdateHouseView, create_user_by_duke, register_form, create_user_by_duke_form
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -13,5 +13,7 @@ urlpatterns = [
     path('leaderboard/', leaderboard, name='leaderboard'),
     path('transfer/', TransferBalanceView.as_view(), name='transfer'),
     path('update-house/', UpdateHouseView.as_view(), name='update-house'),
-
+    path('create-by-duke/', create_user_by_duke, name='create_user_by_duke'),
+    path('register-form/', register_form, name='register_form'),
+    path('create-user-by-duke/', create_user_by_duke_form, name='create_user_by_duke_form'),
 ]

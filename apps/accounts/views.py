@@ -9,6 +9,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, LoginSerializer, TransferBalanceSerializer
 from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -88,3 +92,67 @@ class UpdateHouseView(APIView):
         request.user.house = house
         request.user.save()
         return Response({"message": "House updated successfully."})
+    
+@csrf_exempt
+def register_user(request):
+    """
+    Self-registration endpoint for new users.
+    """
+    if request.method == "POST":
+        try:
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            
+            # Self-registration logic
+            user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            return JsonResponse({"message": "User created successfully", "user_id": user.id})
+        except KeyError as e:
+            return JsonResponse({"error": f"Missing field: {str(e)}"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@login_required
+@csrf_exempt
+def create_user_by_duke(request):
+    """
+    Endpoint for Dukes or higher nobility to create new users.
+    """
+    if request.method == "POST":
+        try:
+            created_by = request.user
+            
+            # Verify nobility level
+            if created_by.nobility > 3:  # Nobility +3
+                return JsonResponse({"error": "Permission denied. Must be Duke or higher."}, status=403)
+
+            # Gather data
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            nobility = int(request.POST.get('nobility', 7))  # Default to Citizen
+            house = request.POST.get('house', None)
+
+            # Check house validity
+            if house and created_by.house != house:
+                return JsonResponse({"error": "You can only assign users to your own house."}, status=403)
+
+            # Create user
+            user = CustomUser.objects.create_user(
+                username=username, email=email, password=password,
+                nobility=nobility, house=house, created_by=created_by
+            )
+            return JsonResponse({"message": "User created successfully", "user_id": user.id})
+        except KeyError as e:
+            return JsonResponse({"error": f"Missing field: {str(e)}"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+def register_form(request):
+    return render(request, 'register.html')
+
+def create_user_by_duke_form(request):
+    return render(request, 'create_by_duke.html')
+

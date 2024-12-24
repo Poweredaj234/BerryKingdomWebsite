@@ -16,10 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+from django.shortcuts import render
+from .views import register
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/accounts/', include('apps.accounts.urls')),
     path('api/chat/', include('apps.chat.urls')),
     path('api/games/', include('apps.games.urls')),
+    path('api/', lambda request: JsonResponse({
+        "message": "Welcome to the API",
+        "endpoints": {
+            "accounts": "/api/accounts/",
+            "chat": "/api/chat/",
+            "games": "/api/games/",
+        }
+    })),
+    path('', lambda request: render(request, 'welcome.html')),
+    path('register/', register, name='register'),
 ]
