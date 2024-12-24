@@ -1,0 +1,14 @@
+GPT Prompt: I want to make a website for my friends and I, I do not want to spend money on any services but still offer the option if there are no free alternatives. I will host it utilizing GitHub pages. The website will need a database, preferably sql for it's data storage, not sure how to host the storage. I want a mandatory logon page with user accounts tied to their emails, furthermore each user will have a virtual balance(float), nobility(integer), and house(string); The integers for nobility will be hardcoded while I want houses to be maleable. Within the website, there will be a chat board and games to play which users can stake their balance on. Games include both multiplayer and solo games such as blackjack for multiplayer and coin toss for singleplayer. I need a framework for the games so more can be added later. On the main page, after signing in, along with hosting all the buttons necessary for the use of the site, There should be a leaderboard displaying the top users in terms of balance. furthermore, there should be a way for players to send and recieve balance between each other. 
+Here are the User Variables:
+    Balance (Float)
+    Nobility (Integer) (List: 
+        0, King
+        1, Archduke
+        2, Prince
+        3, Marquess
+        4, Count
+        5, Viscount
+        6, Baron
+        7, Citizen 
+        )
+    House (String)
