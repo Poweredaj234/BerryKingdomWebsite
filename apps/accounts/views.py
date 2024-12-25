@@ -4,7 +4,7 @@ from .serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, LoginSerializer, TransferBalanceSerializer
@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -156,3 +158,24 @@ def register_form(request):
 def create_user_by_duke_form(request):
     return render(request, 'create_by_duke.html')
 
+@api_view(['POST'])
+def validate_token(request):
+    auth = JWTAuthentication()
+    try:
+        token = request.headers.get('Authorization').split()[1]  # Extract Bearer token
+        validated_token = auth.get_validated_token(token)
+        user = auth.get_user(validated_token)
+        return Response({"username": user.username})
+    except (InvalidToken, AttributeError):
+        return Response({"error": "Invalid token"}, status=401)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_info(request):
+    user = request.user
+    return Response({
+        "username": user.username,
+        "balance": user.balance,
+        "nobility": user.nobility,
+        "house": user.house,
+    })

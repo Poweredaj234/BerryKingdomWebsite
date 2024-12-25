@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
 from django.shortcuts import render
-from .views import register
 
 
 urlpatterns = [
@@ -35,5 +34,5 @@ urlpatterns = [
         }
     })),
     path('', lambda request: render(request, 'welcome.html')),
-    path('register/', register, name='register'),
+
 ]
