@@ -154,3 +154,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # frontend's origin
+]

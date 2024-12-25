@@ -14,3 +14,5 @@ Here are the User Variables:
     House (String)
 
 BlackJack missing logic.. \games\logic.py && views.py
+
+curl -X GET http://127.0.0.1:8000/api/accounts/users/ -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM1MTUxMzQxLCJpYXQiOjE3MzUxNTEwNDEsImp0aSI6IjA4YTdiNzM5NDlmODQ3NGJiNzUzOTI3ODNhMmY3ZWI5IiwidXNlcl9pZCI6MX0.do6a1et6jSHw9EA5muweVFIJOXobx8a-o6NiluHTdXY"

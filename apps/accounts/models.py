@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
             (8, 'Citizen'),
             (9, 'Stateless'),
         ],
-        default=7
+        default=8
     )
     house = models.CharField(max_length=100, blank=True, null=True)
 
@@ -39,7 +39,7 @@ class CustomUserManager(BaseUserManager):
         """
         if created_by:
             # Admin/privileged user creation
-            if created_by.nobility > 1:  # Only Duke or higher
+            if created_by.nobility > 3:  # Only Duke or higher
                 if nobility < created_by.nobility:
                     raise ValueError("You cannot create a user with higher nobility than yourself.")
             else:

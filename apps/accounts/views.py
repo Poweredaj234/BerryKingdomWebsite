@@ -152,12 +152,6 @@ def create_user_by_duke(request):
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-def register_form(request):
-    return render(request, 'register.html')
-
-def create_user_by_duke_form(request):
-    return render(request, 'create_by_duke.html')
-
 @api_view(['POST'])
 def validate_token(request):
     auth = JWTAuthentication()
@@ -173,9 +167,11 @@ def validate_token(request):
 @permission_classes([IsAuthenticated])
 def get_user_info(request):
     user = request.user
+    print(f"User info requested by: {user.username}")
+    print(f"Authorization Header: {request.headers.get('Authorization')}")
     return Response({
         "username": user.username,
-        "balance": user.balance,
-        "nobility": user.nobility,
-        "house": user.house,
+        "balance": getattr(user, 'balance', 0.0),
+        "nobility": getattr(user, 'nobility', 8),
+        "house": getattr(user, 'house', None),
     })
