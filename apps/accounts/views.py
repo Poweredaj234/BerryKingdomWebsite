@@ -170,8 +170,10 @@ def get_user_info(request):
     print(f"User info requested by: {user.username}")
     print(f"Authorization Header: {request.headers.get('Authorization')}")
     return Response({
+        "id": user.id,
         "username": user.username,
-        "balance": getattr(user, 'balance', 0.0),
+        "email": user.email,
+        "balance": getattr(user, 'balance', 0.0),  # Ensure these fields exist
         "nobility": getattr(user, 'nobility', 8),
         "house": getattr(user, 'house', None),
     })

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager
 
 class CustomUser(AbstractUser):
-    balance = models.FloatField(default=0.0)
+    balance = models.FloatField(default=20.0)
     nobility = models.IntegerField(
         choices=[
             (0, 'King'),
